@@ -1,0 +1,6 @@
+---
+####  --- customizations ------
+
+- include: repositories.yml
+  tags:
+    - redmine-repos

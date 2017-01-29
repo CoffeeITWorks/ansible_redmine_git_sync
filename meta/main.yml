@@ -1,0 +1,15 @@
+---
+galaxy_info:
+  author: Pablo Estigarribia
+  description: ansible role to sync repositories also have option to test gitlab_hook plugin
+  company: CoffeeITWorks
+  license: GPLv2
+  min_ansible_version: 2.0
+  platforms:
+  - name: Ubuntu
+    versions:
+    - trusty
+  categories:
+  - development
+  - web
+dependencies: []

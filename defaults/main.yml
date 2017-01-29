@@ -1,0 +1,21 @@
+---
+
+# User to clone git-repositories
+
+redmine_git_repos: "/opt/repositories"
+redmine_git_user: "www-data"
+redmine_url: "http://localhost"
+
+# After installing redmine go to admin / settings / repositories
+# Enable: Enable WS for repository management
+# Paste here your key
+redmine_api_key: "somehashstring"
+redmine_git_test_gitlabhook: false
+
+# Repositories to clone
+# The project name will be used to test the api url from redmine and the apikey that will be used for githook
+redmine_repositories:
+  reponame:
+    project: "project_name_to_associate"
+    repositoryurl: "https://somehost/someuser/repo.git"
+    repositorydir: "name.git"

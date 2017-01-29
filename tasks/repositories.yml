@@ -1,0 +1,53 @@
+# file: tasks/repositories.yml
+# Objetive, sync repositories in redmine
+
+- name: ensure repos directory
+  file: path="{{ redmine_git_repos }}" owner=www-data group=www-data mode='u+rwx,g+rwxs,o+rx' state=directory
+
+# Git repositories: ----
+# howto from: http://www.redmine.org/projects/redmine/wiki/HowTo_keep_in_sync_your_git_repository_for_redmine
+
+# Show public key
+
+# Git: sync gitlab projects into redmine:
+- name: sync repositories
+  git:
+    repo: "{{ item.value.repositoryurl }}"
+    dest: "{{ redmine_git_repos }}/{{ item.value.repositorydir }}"
+    umask: "0002"
+    update: yes
+  with_dict: "{{ redmine_repositories }}"
+  become_user: "{{ redmine_git_user }}"
+
+# https://github.com/phlegx/redmine_gitlab_hook/issues/2
+- name: Testing web hooks
+  shell: "curl {{ redmine_url }}/gitlab_hook -d 'project_id={{ item.value.project }}&key={{ redmine_api_key }}' --insecure >> /tmp/testing_hooks.log"
+  with_dict: "{{ redmine_repositories }}"
+  when: redmine_git_test_gitlabhook
+
+- debug: msg="Web_hook - {{ redmine_url }}/gitlab_hook?project_id={{ item.value.project }}&key={{ redmine_api_key }}"
+  with_dict: "{{ redmine_repositories }}"
+  when: redmine_git_test_gitlabhook
+
+- debug: msg="Configure those web_hooks in your projects at gitlab."
+
+# Cron jobs for git repositories synchronization:
+- name: add cron job to synchronize repos
+  cron: name="{{ item.value.repositorydir }} repository"
+        job="cd {{ redmine_git_repos }}/{{ item.value.repositorydir }} && git pull --rebase=false -f "
+        user="{{ redmine_git_user }}"
+        cron_file='redmine_server_git'
+        minute='*/5'
+  with_dict: "{{ redmine_repositories }}"
+
+# Exec this if you want to periodically fetch changes in repository
+# It is not really necesary if you use gitlab_hook, but it could be good to keep it anyway
+- name: Use a git fetch changes on repositories from redmine api key
+  cron: name='Fetch changes on repositories'
+        job="curl {{ redmine_url }}/sys/fetch_changesets?key={{ redmine_api_key }} --insecure -o /dev/null"
+        user="{{ redmine_git_user }}"
+        cron_file='redmine_server_git'
+        minute='*/5'
+
+# It never worked for me:
+# /usr/share/redmine/extra/svn/reposman.rb --owner=www-data --svn-dir=/var/lib/git --url=file://var/lib/git --scm=Git --redmine-host=localhost --key=somekey --verbose
