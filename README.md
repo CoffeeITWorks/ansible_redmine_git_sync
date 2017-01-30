@@ -1,9 +1,3 @@
-radamanth.redmine-ansible
-=========
-
-This role install Redmine and set the default root passwd.
-It also set an https reverse proxy with apache2 
-
 Requirements
 ------------
 
@@ -63,15 +57,6 @@ http://redmineuy.group.upm.com/gitlab_hook?project_id=yourassociatedprojectforth
 Add the repository to your project in redmine /projects/projectname/settings/repositories
 
 on location path, just use the path specified in `redmine_git_repos`/`repositorydir` per repository synchronized
-
-
-Dependencies
-------------
-
-Galaxy role : ANXS.mysql
-
-Example Playbook
-----------------
 
 
 License
