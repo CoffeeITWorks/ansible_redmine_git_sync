@@ -14,8 +14,10 @@
   git:
     repo: "{{ item.value.repositoryurl }}"
     dest: "{{ redmine_git_repos }}/{{ item.value.repositorydir }}"
+    bare: yes
     umask: "0002"
     update: yes
+    force: yes
   with_dict: "{{ redmine_repositories }}"
   become_user: "{{ redmine_git_user }}"
 
