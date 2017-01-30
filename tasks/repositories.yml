@@ -36,7 +36,7 @@
 # Cron jobs for git repositories synchronization:
 - name: add cron job to synchronize repos
   cron: name="{{ item.value.repositorydir }} repository"
-        job="cd {{ redmine_git_repos }}/{{ item.value.repositorydir }} && git pull --rebase=false -f "
+        job="git --git-dir={{ item.value.repositorydir }} fetch origin +refs/heads/*:refs/heads/* --prune"
         user="{{ redmine_git_user }}"
         cron_file='redmine_server_git'
         minute='*/5'
