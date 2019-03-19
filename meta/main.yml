@@ -3,13 +3,21 @@ galaxy_info:
   author: Pablo Estigarribia
   description: ansible role to sync repositories also have option to test gitlab_hook plugin
   company: CoffeeITWorks
-  license: GPLv2
-  min_ansible_version: 2.0
+  min_ansible_version: 2.6
+  # https://galaxy.ansible.com/api/v1/platforms/
+  license: MIT
   platforms:
   - name: Ubuntu
     versions:
     - trusty
-  categories:
+    - xenial
+    - bionic
+  - name: Debian
+    versions:
+    - all
+  galaxy_tags:
+  - redmine
   - development
+  - projects
   - web
 dependencies: []
